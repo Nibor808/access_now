@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export interface SearchAction {
   type: ActionTypes.search;
-  payload: google.maps.places.PlaceResult[];
+  payload: google.maps.places.PlaceResult[] | [{}];
 }
 
 export interface SaveSearchResult {
@@ -31,10 +31,15 @@ export const search = (
   terms: string,
   service: google.maps.places.PlacesService
 ) => async (dispatch: Dispatch) => {
-  /* clear previous search results string displayed in App before making a new request */
+  /* clear saveSearchResult and search results before making a new request */
   dispatch<SaveSearchResult>({
     type: ActionTypes.saveSearchResult,
     payload: '',
+  });
+
+  dispatch<SearchAction>({
+    type: ActionTypes.search,
+    payload: [{}],
   });
 
   const request = {
@@ -59,6 +64,11 @@ export const search = (
         dispatch<SearchTerms>({
           type: ActionTypes.searchTerms,
           payload: terms,
+        });
+      } else {
+        dispatch<SearchAction>({
+          type: ActionTypes.search,
+          payload: [{ name: 'No Matches' }],
         });
       }
     }

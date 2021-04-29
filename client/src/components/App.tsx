@@ -22,15 +22,19 @@ interface AppState {
   firstLoadTime: number;
   userId: number;
   selectedCache: Object;
+  error: string;
 }
 
 interface SelectedCache {
   [key: string]: {};
 }
 
-class App extends React.Component<AppProps, AppState> {
+export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
+
+    /* binding this here as opposed to an arrow function to allow for easier testing */
+    this.callSearch = this.callSearch.bind(this);
 
     this.state = {
       term: '',
@@ -39,6 +43,7 @@ class App extends React.Component<AppProps, AppState> {
       firstLoadTime: 0,
       userId: Math.floor(Math.random() * 1000),
       selectedCache: {},
+      error: '',
     };
   }
 
@@ -54,13 +59,15 @@ class App extends React.Component<AppProps, AppState> {
     });
   }
 
-  callSearch = (): void => {
+  callSearch(): void {
     const { term, service } = this.state;
+
+    if (!term) return this.setState({ error: 'Please enter a search term.' });
 
     /* perform search and reset selected value */
     this.props.search(term, service);
     this.setState({ selected: { formatted_address: '', name: '' } });
-  };
+  }
 
   renderSelected(result: SearchResult): void {
     /* set new selected value from search results when clicked */
@@ -93,40 +100,48 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
-    const { selected } = this.state;
+    const { selected, error } = this.state;
     const { saveSearchResult } = this.props;
 
     return (
       <div style={{ padding: '20px' }}>
         <h1>Find</h1>
-        <div id='service' />
-        <label htmlFor='term' style={{ marginRight: '5px' }}>
-          Enter a place or a thing
+        <div id='service' data-testid='service' />
+        <label
+          htmlFor='term'
+          style={{ marginRight: '5px' }}
+          data-testid='label'
+        >
+          Enter a place (Toronto) or a list of things (beer and wings)
         </label>
         <input
+          data-testid='term'
           type='text'
           id={'term'}
-          onChange={ev => this.setState({ term: ev.target.value })}
+          onChange={ev => {
+            this.setState({ term: ev.target.value });
+            this.setState({ error: '' });
+          }}
         />
-        <button type='submit' onClick={this.callSearch}>
+        <button type='submit' onClick={this.callSearch} id='submitBtn'>
           Search
         </button>
 
-        <ul>{this.renderResults()}</ul>
+        {error ? <p style={{ color: 'red' }}>{error}</p> : null}
+
+        <ul data-testid='searchResults'>{this.renderResults()}</ul>
 
         {selected.name ? (
-          <div>
-            <p>Selected</p>
+          <div id='selected'>
             <p>
-              {selected.name}: {selected.formatted_address}
+              Selected: {selected.name}: {selected.formatted_address}
             </p>
           </div>
         ) : null}
 
         {saveSearchResult ? (
-          <div>
-            <p>Saved</p>
-            <p>{saveSearchResult}</p>
+          <div id='saveSearchResult'>
+            <p>Saved: {saveSearchResult}</p>
           </div>
         ) : null}
       </div>

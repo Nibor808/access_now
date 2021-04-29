@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 export const sequelize = new Sequelize(
-  'postgres://robinerickson:null@localhost:5432/access_now'
+  `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:5432/access_now`
 );
 
 export const startDB = async () => {

@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startDB = exports.sequelize = void 0;
 var sequelize_1 = require("sequelize");
-exports.sequelize = new sequelize_1.Sequelize('postgres://robinerickson:null@localhost:5432/access_now');
+exports.sequelize = new sequelize_1.Sequelize("postgres://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@localhost:5432/access_now");
 var startDB = function () { return __awaiter(void 0, void 0, void 0, function () {
     var err_1;
     return __generator(this, function (_a) {
