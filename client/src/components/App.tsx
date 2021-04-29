@@ -90,13 +90,15 @@ export class App extends React.Component<AppProps, AppState> {
   renderResults(): ReactNode {
     const { searchResults } = this.props;
 
-    return searchResults.map((result: SearchResult, index: number) => {
-      return (
-        <li key={index} onClick={() => this.renderSelected(result)}>
-          {result.name} - {result.formatted_address}
-        </li>
-      );
-    });
+    if (searchResults.length) {
+      return searchResults.map((result: SearchResult, index: number) => {
+        return (
+          <li key={index} onClick={() => this.renderSelected(result)}>
+            {result.name} - {result.formatted_address}
+          </li>
+        );
+      });
+    }
   }
 
   render() {

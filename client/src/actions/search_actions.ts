@@ -39,7 +39,7 @@ export const search = (
 
   dispatch<SearchAction>({
     type: ActionTypes.search,
-    payload: [{}],
+    payload: [],
   });
 
   const request = {
@@ -65,7 +65,9 @@ export const search = (
           type: ActionTypes.searchTerms,
           payload: terms,
         });
-      } else {
+      } else if (
+        status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS
+      ) {
         dispatch<SearchAction>({
           type: ActionTypes.search,
           payload: [{ name: 'No Matches' }],

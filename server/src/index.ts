@@ -20,10 +20,6 @@ startDB().then(() => {
   Search.sync().then(() => console.log('Table Search created'));
 });
 
-app.get('/', () => {
-  console.log('TEST');
-});
-
 app.post('/savesearch', saveSearch);
 
 app.listen(3001, () => {
