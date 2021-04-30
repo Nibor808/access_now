@@ -93,7 +93,11 @@ export class App extends React.Component<AppProps, AppState> {
     if (searchResults.length) {
       return searchResults.map((result: SearchResult, index: number) => {
         return (
-          <li key={index} onClick={() => this.renderSelected(result)}>
+          <li
+            key={index}
+            onClick={() => this.renderSelected(result)}
+            style={{ padding: '5px 0', borderBottom: '1px solid grey' }}
+          >
             {result.name} - {result.formatted_address}
           </li>
         );
@@ -131,7 +135,12 @@ export class App extends React.Component<AppProps, AppState> {
 
         {error ? <p style={{ color: 'red' }}>{error}</p> : null}
 
-        <ul data-testid='searchResults'>{this.renderResults()}</ul>
+        <ul
+          data-testid='searchResults'
+          style={{ listStyle: 'none', width: '60%' }}
+        >
+          {this.renderResults()}
+        </ul>
 
         {selected.name ? (
           <div id='selected'>

@@ -32,6 +32,10 @@ instance for data storage.
 
 ### Start Up
 
+Clone the repo with `git clone https://github.com/Nibor808/access_now.git`.
+
+Run `npm install` in both the client and server directories.
+
 Client - in access_now/client use `npm start` to start the client. Tests can be run with `npm test`.
 
 Server - in access_now/server use `npm start` to start the server. Ensure that there is a local Postgres instance
